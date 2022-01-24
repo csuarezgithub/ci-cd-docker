@@ -29,13 +29,14 @@ pipeline {
         stage('UNIT TEST'){
             steps {
                 //sh 'mvn test'
-                sh 'echo tedt'
+                sh 'echo test'
             }
         }
 
         stage('INTEGRATION TEST'){
             steps {
-                sh 'mvn verify -DskipUnitTests'
+                //sh 'mvn verify -DskipUnitTests'
+                sh 'echo integrationtest'
             }
         }
 
