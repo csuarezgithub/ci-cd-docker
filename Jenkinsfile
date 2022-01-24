@@ -52,11 +52,6 @@ pipeline {
         }
 
         stage('CODE ANALYSIS with SONARQUBE') {
-
-            environment {
-                scannerHome = tool 'mysonarscanner4'
-            }
-
             steps {
                sh 'echo codeanalisys'
             }
