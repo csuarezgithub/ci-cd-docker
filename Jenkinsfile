@@ -65,7 +65,10 @@ pipeline {
         stage('Build App Image'){
             steps {
                 script {
-                    dockerImage = docker.build registry + ":V$BUILD_NUMBER"
+                    withDockerServer('tcp://172.17.0.1:2375'){
+                        dockerImage = docker.build registry + ":V$BUILD_NUMBER"
+                    }
+                    
                 }
             }
         }
