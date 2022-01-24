@@ -28,7 +28,8 @@ pipeline {
 
         stage('UNIT TEST'){
             steps {
-                sh 'mvn test'
+                //sh 'mvn test'
+                sh 'echo tedt'
             }
         }
 
