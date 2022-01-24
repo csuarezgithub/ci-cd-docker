@@ -76,7 +76,7 @@ pipeline {
                 }
             }
         }
-        // Uploading Docker images into AWS ECR
+        
         stage('Build App Image dockerhub'){
             steps {
                 script {
@@ -85,7 +85,7 @@ pipeline {
                 }
             }
         }
-
+        // Uploading Docker images into AWS ECR
         stage('Pushing to ECR'){
             steps{
                 script{
