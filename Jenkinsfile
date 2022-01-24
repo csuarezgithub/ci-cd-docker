@@ -9,6 +9,11 @@ pipeline {
     environment {
         registry = "csuarezdocker/vproappdock"
         registryCredential = 'dockerhub'
+        AWS_ACCOUNT_ID="991256897826"
+        AWS_DEFAULT_REGION="us-east-1" 
+        IMAGE_REPO_NAME="jenkin_pipeline_build_demo"
+        IMAGE_TAG="V$BUILD_NUMBER"
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
     }
 
     stages{
@@ -57,11 +62,35 @@ pipeline {
             }
         }
 
-        stage('Build App Image'){
+        stage('Logging into AWS ECR') {
+            steps{
+                sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+            }
+        }
+
+        stage('Build App Image AWS ECR'){
+            steps {
+                script {
+                    dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+                    
+                }
+            }
+        }
+        // Uploading Docker images into AWS ECR
+        stage('Build App Image dockerhub'){
             steps {
                 script {
                     dockerImage = docker.build registry + ":V$BUILD_NUMBER"
                     
+                }
+            }
+        }
+
+        stage('Pushing to ECR'){
+            steps{
+                script{
+                    sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
+                    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
                 }
             }
         }
