@@ -35,8 +35,8 @@ pipeline {
 
         stage('INTEGRATION TEST'){
             steps {
-                //sh 'mvn verify -DskipUnitTests'
-                sh 'echo integrationtest'
+                sh 'mvn verify -DskipUnitTests'
+                //sh 'echo integrationtest'
             }
         }
 
